@@ -13,7 +13,7 @@ type PasetoMaker struct {
 }
 
 // NewPasetoMaker 创建 PasetoMaker 实例
-func NewPasetoMaker(key []byte) (Maker, error) {
+func NewPasetoMaker(key []byte) (MakerToken, error) {
 	if len(key) != chacha20poly1305.KeySize {
 		return nil, ErrSecretLen
 	}

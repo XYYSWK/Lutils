@@ -7,9 +7,9 @@ import (
 
 var ErrSecretLen = errors.New("密钥长度不正确")
 
-type Maker interface {
-	// CreateToken 生成 Token
+type MakerToken interface {
+	// CreateToken 生成 MakerToken
 	CreateToken(content []byte, expireDate time.Duration) (string, *Payload, error)
-	// VerifyToken 解析 Token
+	// VerifyToken 解析 MakerToken
 	VerifyToken(token string) (*Payload, error)
 }
