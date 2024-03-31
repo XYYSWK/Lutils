@@ -1,4 +1,4 @@
-package obs
+package upload
 
 import (
 	"github.com/huaweicloud/huaweicloud-sdk-go-obs/obs"
