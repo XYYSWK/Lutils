@@ -6,6 +6,10 @@ import (
 	"net/http"
 )
 
+/*
+构造 HTTP 响应，针对使用 Gin 框架的 HTTP 服务的一个封装。更加结构化和模块化的方式来处理 HTTP 响应，使得代码更易于理解、维护和发展
+*/
+
 type Response struct {
 	c *gin.Context
 }
