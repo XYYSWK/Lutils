@@ -4,6 +4,7 @@ import "sync"
 
 /*
 	工作池，它使用一组固定数量的工作线程来执行任务队列中的工作单元。
+	可以处理：“一组耗时的任务需要执行，我们希望并发执行它们，但同时限制开发度。“的问题
 */
 
 type Worker struct {
@@ -14,9 +15,9 @@ type Worker struct {
 }
 
 type Config struct {
-	TaskChanCapacity uint // 任务 channel 容量
-	WorkerNum        uint // 协程工人数
-	ErrChanCapacity  uint // 错误 channel 容量
+	TaskChanCapacity int // 任务 channel 容量
+	WorkerNum        int // 协程工人数
+	ErrChanCapacity  int // 错误 channel 容量
 }
 
 func Init(config *Config) *Worker {
@@ -32,7 +33,7 @@ func Init(config *Config) *Worker {
 
 func (w *Worker) run() {
 	w.wg.Add(int(w.config.WorkerNum))
-	for i := uint(0); i < w.config.WorkerNum; i++ {
+	for i := 0; i < w.config.WorkerNum; i++ {
 		go w.work()
 	}
 }
