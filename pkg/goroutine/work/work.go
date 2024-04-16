@@ -8,49 +8,30 @@ import "sync"
 */
 
 type Worker struct {
-	config   Config
-	taskChan chan func()      // 任务通道，用于接收待执行的任务函数
-	errChan  chan interface{} // 错误通道，用于传递任务执行过程中的错误信息
-	wg       sync.WaitGroup   // WaitGroup，用于等待所有任务执行完成
+	taskChan chan func()  // 任务通道，用于接收待执行的任务函数
+	workChan chan func()  // 工作通道
+	rwMutex  sync.RWMutex // 读写锁
 }
 
 type Config struct {
-	TaskChanCapacity int // 任务 channel 容量
-	WorkerNum        int // 协程工人数
-	ErrChanCapacity  int // 错误 channel 容量
+	TaskChanCapacity   int // 任务 channel 容量
+	WorkerChanCapacity int // 工作 channel 容量
+	WorkerNum          int // 协程工人数
 }
 
-func Init(config *Config) *Worker {
+func Init(config Config) *Worker {
 	w := &Worker{
-		config:   *config,
 		taskChan: make(chan func(), config.TaskChanCapacity),
-		errChan:  make(chan interface{}, config.ErrChanCapacity),
-		wg:       sync.WaitGroup{},
+		workChan: make(chan func(), config.WorkerChanCapacity),
+		rwMutex:  sync.RWMutex{},
 	}
-	w.run()
+	for i := 0; i < config.WorkerNum; i++ {
+		go w.work()
+	}
 	return w
 }
 
-func (w *Worker) run() {
-	w.wg.Add(int(w.config.WorkerNum))
-	for i := 0; i < w.config.WorkerNum; i++ {
-		go w.work()
-	}
-}
-
 func (w *Worker) work() {
-	defer func() {
-		err := recover()
-		if err == nil {
-			w.wg.Done()
-			return
-		}
-		select {
-		case w.errChan <- err:
-		default:
-		}
-		go w.work() // 重新启动
-	}()
 	for task := range w.taskChan {
 		task()
 	}
@@ -58,21 +39,4 @@ func (w *Worker) work() {
 
 func (w *Worker) SendTask(task func()) {
 	w.taskChan <- task
-}
-
-func (w *Worker) Err() <-chan interface{} {
-	return w.errChan
-}
-
-func (w *Worker) Stop() {
-	close(w.taskChan)
-	w.wg.Wait()
-}
-
-func (w *Worker) Restart(config *Config) {
-	w.Stop()
-	if config != nil {
-		w.config = *config
-	}
-	w.run()
 }
