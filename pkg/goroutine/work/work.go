@@ -14,9 +14,9 @@ type Worker struct {
 }
 
 type Config struct {
-	TaskChanCapacity   int // 任务 channel 容量
-	WorkerChanCapacity int // 工作 channel 容量
-	WorkerNum          int // 协程工人数
+	TaskChanCapacity   int // 任务队列容量
+	WorkerChanCapacity int // 工作队列容量
+	WorkerNum          int // 工作池数
 }
 
 func Init(config Config) *Worker {

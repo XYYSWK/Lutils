@@ -11,14 +11,24 @@ import (
 
 type Config struct {
 	//前两个字段推荐从 系统环境变量中获取
-	AccessKeyID     string //访问 OBS 所需的密钥 ID
-	SecretAccessKey string //访问 OBS 所需的密钥密钥
-	Location        string //存储桶所在区域，必须和传入 Endpoint 中 Region 保持一致
-	BucketName      string //存储桶名称
-	BucketUrl       string //存储桶 URL."https://your-bucket-name.obs.cn-north-4.myhuaweicloud.com"
-	Endpoint        string //OBS 服务的 Endpoint，用与访问 OBS 的 API "https://obs.cn-north-4.myhuaweicloud.com"
-	BasePath        string //上传文件时，文件在存储桶中的基础路径
+	AccessKeyID      string //访问 OBS 所需的密钥 ID
+	SecretAccessKey  string //访问 OBS 所需的密钥密钥
+	Location         string //存储桶所在区域，必须和传入 Endpoint 中 Region 保持一致
+	BucketName       string //存储桶名称
+	BucketUrl        string //存储桶 URL."https://your-bucket-name.obs.cn-north-4.myhuaweicloud.com"
+	Endpoint         string //OBS 服务的 Endpoint，用与访问 OBS 的 API "https://obs.cn-north-4.myhuaweicloud.com"
+	BasePath         string //上传文件时，文件在存储桶中的基础路径
+	FileType         string
+	AccountAvatarUrl string
+	FriendAvatarUrl  string
+	GroupAvatarUrl   string
 }
+
+var (
+	AccountAvatarType = "AccountAvatarType"
+	FriendAvatarType  = "FriendAvatarType"
+	GroupAvatarType   = "GroupAvatarType"
+)
 
 type OBS struct {
 	config Config
@@ -45,6 +55,11 @@ func (o *OBS) UploadFile(file *multipart.FileHeader, input *obs.PutObjectInput) 
 	//对象名。对象名是对象在存储桶中的唯一标识。对象名是对象在桶中的完整路径，路径中不包含桶名。
 	//例如，您对象的访问地址为examplebucket.obs.cn-north-4.myhuaweicloud.com/folder/test.txt 中，对象名为folder/test.txt。
 	key := o.config.BasePath + time.Now().Format("2006-01-02-15:04:05.99") + path.Ext(file.Filename)
+	if o.config.FileType == AccountAvatarType {
+		key = o.config.AccountAvatarUrl + time.Now().Format("2006-01-02-15:04:05.99") + path.Ext(file.Filename)
+	} else if o.config.FileType == FriendAvatarType {
+		key = o.config.FriendAvatarUrl + time.Now().Format("2006-01-02-15:04:05.99") + path.Ext(file.Filename)
+	}
 	//指定上传对象
 	input.Key = key
 
