@@ -1,4 +1,4 @@
-module github.com/XYYSWK/Rutils
+module github.com/XYYSWK/Lutils
 
 go 1.19
 

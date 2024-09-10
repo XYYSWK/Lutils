@@ -3,7 +3,7 @@ package heal
 import (
 	"context"
 	"fmt"
-	"github.com/XYYSWK/Rutils/pkg/goroutine/pattern"
+	"github.com/XYYSWK/Lutils/pkg/goroutine/pattern"
 	"log"
 	"time"
 )

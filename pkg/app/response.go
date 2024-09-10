@@ -1,8 +1,7 @@
 package app
 
 import (
-	"fmt"
-	"github.com/XYYSWK/Rutils/pkg/app/errcode"
+	"github.com/XYYSWK/Lutils/pkg/app/errcode"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -39,7 +38,6 @@ func (r *Response) Reply(err errcode.Err, datas ...interface{}) {
 	}
 	if err == nil {
 		err = errcode.StatusOk
-		fmt.Println("---hhhhhh-", err.ECode())
 	} else {
 		data = nil
 	}

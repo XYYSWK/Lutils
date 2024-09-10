@@ -2,7 +2,7 @@ package token
 
 import (
 	"encoding/json"
-	"github.com/XYYSWK/Rutils/pkg/utils"
+	"github.com/XYYSWK/Lutils/pkg/utils"
 	"github.com/stretchr/testify/require"
 	"math/rand"
 	"strings"

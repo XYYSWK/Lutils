@@ -2,7 +2,7 @@ package email
 
 import (
 	"fmt"
-	"github.com/XYYSWK/Rutils/pkg/times"
+	"github.com/XYYSWK/Lutils/pkg/times"
 	"testing"
 	"time"
 )

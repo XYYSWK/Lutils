@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/XYYSWK/Rutils/pkg/utils"
+	"github.com/XYYSWK/Lutils/pkg/utils"
 	"net/http"
 )
 
