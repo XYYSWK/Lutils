@@ -38,7 +38,7 @@ func (w *Worker) work() {
 }
 
 func (w *Worker) SendTask(task func()) {
-	w.l.Lock()
-	defer w.l.Unlock()
+	w.rwMutex.Lock()
+	defer w.rwMutex.Unlock()
 	w.taskChan <- task
 }
